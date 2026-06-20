@@ -1,31 +1,24 @@
-# E-Commerce REST API
+# ecommerce-api
 
-A production-ready REST API built with TypeScript, Express, and Zod for an e-commerce platform. Uses in-memory storage with seed data.
+A REST API for an e-commerce platform built with TypeScript and Express. Supports product management, a shopping cart, and order creation backed by an in-memory data store.
+
+![TypeScript](https://img.shields.io/badge/TypeScript-5.3-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-20+-339933?style=flat-square&logo=nodedotjs&logoColor=white)
+![Express](https://img.shields.io/badge/Express-4.18-000000?style=flat-square&logo=express&logoColor=white)
 
 ---
 
-## Setup
+## Tech Stack
 
-### 1. Install dependencies
-
-```bash
-npm install
-```
-
-### 2. Run in development mode
-
-```bash
-npm run dev
-```
-
-Server starts at **http://localhost:3000**
-
-### 3. Build for production
-
-```bash
-npm run build
-npm start
-```
+| | |
+|---|---|
+| Language | TypeScript `^5.3.3` |
+| Runtime | Node.js 20+ |
+| Framework | Express `^4.18.2` |
+| Validation | Zod `^3.22.4` |
+| ID generation | uuid `^9.0.0` |
+| Dev server | ts-node-dev `^2.0.0` |
+| Data store | In-memory arrays (no database) |
 
 ---
 
@@ -33,29 +26,51 @@ npm start
 
 ```
 src/
+├── app.ts
 ├── controllers/
-│   ├── product.controller.ts
 │   ├── cart.controller.ts
-│   └── order.controller.ts
-├── services/
-│   ├── product.service.ts
-│   ├── cart.service.ts
-│   └── order.service.ts
-├── routes/
-│   ├── product.routes.ts
-│   ├── cart.routes.ts
-│   └── order.routes.ts
-├── middleware/
-│   ├── validate.ts
-│   └── errorHandler.ts
-├── errors/
-│   └── AppError.ts
-├── types/
-│   └── index.ts
+│   ├── order.controller.ts
+│   └── product.controller.ts
 ├── data/
 │   └── store.ts
-└── app.ts
+├── errors/
+│   └── AppError.ts
+├── middleware/
+│   ├── errorHandler.ts
+│   └── validate.ts
+├── routes/
+│   ├── cart.routes.ts
+│   ├── order.routes.ts
+│   └── product.routes.ts
+├── services/
+│   ├── cart.service.ts
+│   ├── order.service.ts
+│   └── product.service.ts
+└── types/
+    └── index.ts
 ```
+
+---
+
+## Setup
+
+**Prerequisites:** Node.js v20+
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server (hot reload)
+npm run dev
+
+# Build for production
+npm run build
+
+# Run compiled output
+npm start
+```
+
+The server starts at `http://localhost:3000`.
 
 ---
 
@@ -63,195 +78,211 @@ src/
 
 ### Health
 
-| Method | Endpoint   | Description        |
-|--------|------------|--------------------|
-| GET    | `/health`  | Server health check |
-
----
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET` | `/health` | Server health check |
 
 ### Products
 
-| Method | Endpoint           | Description              |
-|--------|--------------------|--------------------------|
-| GET    | `/products`        | List all products (with filters + pagination) |
-| GET    | `/products/:id`    | Get single product       |
-| POST   | `/products`        | Create product           |
-| PUT    | `/products/:id`    | Update product           |
-| DELETE | `/products/:id`    | Delete product           |
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET` | `/products` | List products with optional filters and pagination |
+| `GET` | `/products/:id` | Get a product by ID |
+| `POST` | `/products` | Create a product |
+| `PUT` | `/products/:id` | Update a product |
+| `DELETE` | `/products/:id` | Delete a product |
 
-**GET /products — Query Parameters**
+**`GET /products` — query parameters**
 
-| Parameter   | Type   | Description                    |
-|-------------|--------|--------------------------------|
-| `category`  | string | Filter by category             |
-| `minPrice`  | number | Minimum price filter           |
-| `maxPrice`  | number | Maximum price filter           |
-| `page`      | number | Page number (default: 1)       |
-| `limit`     | number | Items per page (default: 10)   |
-
----
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `category` | string | — | Filter by category |
+| `minPrice` | number | — | Minimum price |
+| `maxPrice` | number | — | Maximum price |
+| `page` | number | `1` | Page number |
+| `limit` | number | `10` | Results per page |
 
 ### Cart
 
-| Method | Endpoint               | Description               |
-|--------|------------------------|---------------------------|
-| GET    | `/cart`                | Get current cart          |
-| POST   | `/cart`                | Add item to cart          |
-| PUT    | `/cart/:productId`     | Update item quantity       |
-| DELETE | `/cart/:productId`     | Remove item from cart      |
-| DELETE | `/cart`                | Clear entire cart          |
-
----
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET` | `/cart` | Get the current cart |
+| `POST` | `/cart` | Add an item to the cart |
+| `PUT` | `/cart/:productId` | Update item quantity |
+| `DELETE` | `/cart/:productId` | Remove a specific item |
+| `DELETE` | `/cart` | Clear the entire cart |
 
 ### Orders
 
-| Method | Endpoint          | Description               |
-|--------|-------------------|---------------------------|
-| POST   | `/orders`         | Create order from cart    |
-| GET    | `/orders`         | List all orders           |
-| GET    | `/orders/:id`     | Get single order          |
+| Method | Path | Description |
+|--------|------|-------------|
+| `POST` | `/orders` | Create an order from the current cart |
+| `GET` | `/orders` | List all orders |
+| `GET` | `/orders/:id` | Get an order by ID |
 
 ---
 
-## Postman Testing Guide
+## Request Bodies
 
-### Step 1 — List products
-
-```
-GET http://localhost:3000/products
-```
-
-Copy any `id` from the response for use in subsequent requests.
-
-### Step 2 — Filter products
-
-```
-GET http://localhost:3000/products?category=electronics&minPrice=100&maxPrice=500&page=1&limit=5
-```
-
-### Step 3 — Get single product
-
-```
-GET http://localhost:3000/products/<id>
-```
-
-### Step 4 — Create product
-
-```
-POST http://localhost:3000/products
-Content-Type: application/json
-
+**`POST /products`**
+```json
 {
-  "name": "USB-C Hub",
-  "description": "7-in-1 USB-C hub with HDMI, USB-A, SD card reader.",
-  "price": 49.99,
+  "name": "Mechanical Keyboard",
+  "description": "TKL keyboard with Cherry MX Red switches.",
+  "price": 129.99,
   "category": "electronics",
-  "stock": 80
+  "stock": 30
 }
 ```
 
-### Step 5 — Update product
-
-```
-PUT http://localhost:3000/products/<id>
-Content-Type: application/json
-
+**`PUT /products/:id`** — all fields optional
+```json
 {
-  "price": 44.99,
-  "stock": 90
+  "price": 119.99,
+  "stock": 25
 }
 ```
 
-### Step 6 — Add item to cart
-
-```
-POST http://localhost:3000/cart
-Content-Type: application/json
-
+**`POST /cart`**
+```json
 {
-  "productId": "<product-id-from-step-1>",
+  "productId": "a1b2c3d4-e5f6-...",
   "quantity": 2
 }
 ```
 
-### Step 7 — View cart
-
-```
-GET http://localhost:3000/cart
-```
-
-Response includes `items` (with subtotals per item), and `total`.
-
-### Step 8 — Update cart item quantity
-
-```
-PUT http://localhost:3000/cart/<productId>
-Content-Type: application/json
-
+**`PUT /cart/:productId`**
+```json
 {
   "quantity": 3
 }
 ```
 
-### Step 9 — Remove item from cart
+**`POST /orders`** — no body required; creates an order from the current cart
 
-```
-DELETE http://localhost:3000/cart/<productId>
-```
+---
 
-### Step 10 — Create order (from current cart)
+## Example curl Requests
 
-```
-POST http://localhost:3000/orders
-```
+```bash
+# List products in a category with pagination
+curl "http://localhost:3000/products?category=electronics&page=1&limit=5"
 
-This will:
-1. Read cart
-2. Validate products
-3. Validate stock (returns 409 if insufficient)
-4. Deduct stock
-5. Create order
-6. Clear cart
-7. Return order
+# Get a single product
+curl "http://localhost:3000/products/<id>"
 
-### Step 11 — List orders
+# Create a product
+curl -X POST http://localhost:3000/products \
+  -H "Content-Type: application/json" \
+  -d '{"name":"USB-C Hub","description":"7-in-1 hub.","price":49.99,"category":"electronics","stock":80}'
 
-```
-GET http://localhost:3000/orders
-```
+# Add an item to the cart
+curl -X POST http://localhost:3000/cart \
+  -H "Content-Type: application/json" \
+  -d '{"productId":"<id>","quantity":2}'
 
-### Step 12 — Get single order
+# View the cart
+curl http://localhost:3000/cart
 
-```
-GET http://localhost:3000/orders/<order-id>
-```
+# Place an order
+curl -X POST http://localhost:3000/orders
 
-### Step 13 — Clear cart
-
-```
-DELETE http://localhost:3000/cart
-```
-
-### Step 14 — Delete product
-
-```
-DELETE http://localhost:3000/products/<id>
+# View all orders
+curl http://localhost:3000/orders
 ```
 
 ---
 
-## Error Responses
+## Sample Responses
 
-All errors follow this shape:
+**`GET /products`**
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "a1b2c3d4-...",
+      "name": "Mechanical Keyboard",
+      "description": "TKL keyboard with Cherry MX Red switches.",
+      "price": 129.99,
+      "category": "electronics",
+      "stock": 30,
+      "createdAt": "2025-07-01T10:00:00.000Z",
+      "updatedAt": "2025-07-01T10:00:00.000Z"
+    }
+  ],
+  "meta": {
+    "page": 1,
+    "limit": 10,
+    "total": 10,
+    "totalPages": 1
+  }
+}
+```
+
+**`GET /cart`**
+```json
+{
+  "success": true,
+  "data": {
+    "items": [
+      {
+        "productId": "a1b2c3d4-...",
+        "quantity": 2,
+        "product": {
+          "id": "a1b2c3d4-...",
+          "name": "Mechanical Keyboard",
+          "description": "TKL keyboard with Cherry MX Red switches.",
+          "price": 129.99,
+          "category": "electronics",
+          "stock": 30,
+          "createdAt": "2025-07-01T10:00:00.000Z",
+          "updatedAt": "2025-07-01T10:00:00.000Z"
+        },
+        "subtotal": 259.98
+      }
+    ],
+    "total": 259.98
+  }
+}
+```
+
+**`POST /orders`**
+```json
+{
+  "success": true,
+  "data": {
+    "id": "f9e8d7c6-...",
+    "items": [
+      {
+        "productId": "a1b2c3d4-...",
+        "productName": "Mechanical Keyboard",
+        "quantity": 2,
+        "priceAtPurchase": 129.99,
+        "subtotal": 259.98
+      }
+    ],
+    "total": 259.98,
+    "status": "confirmed",
+    "createdAt": "2025-07-01T10:05:00.000Z"
+  }
+}
+```
+
+---
+
+## Error Handling
+
+All error responses follow a consistent shape:
 
 ```json
 {
   "success": false,
-  "message": "Error description"
+  "message": "Product not found"
 }
 ```
 
-Validation errors also include an `errors` field:
+Validation errors include a field-level breakdown:
 
 ```json
 {
@@ -264,23 +295,24 @@ Validation errors also include an `errors` field:
 }
 ```
 
-### HTTP Status Codes
+| Status | When |
+|--------|------|
+| `200` | Successful read or update |
+| `201` | Resource created |
+| `400` | Validation error or empty cart on order creation |
+| `404` | Resource not found |
+| `409` | Insufficient stock when placing an order |
+| `500` | Unexpected server error |
 
-| Code | Meaning                         |
-|------|---------------------------------|
-| 200  | OK                              |
-| 201  | Created                         |
-| 400  | Bad Request / Validation Error  |
-| 404  | Not Found                       |
-| 409  | Conflict (e.g. stock insufficient) |
-| 500  | Internal Server Error           |
+### Order creation flow
 
----
+`POST /orders` executes the following sequence atomically:
 
-## Available Product Categories (seed data)
-
-- `electronics`
-- `furniture`
-- `footwear`
-- `accessories`
-- `sports`
+1. Reads the current cart
+2. Validates each product exists
+3. Validates stock is sufficient for each item
+4. Returns `409` if any item exceeds available stock (no changes made)
+5. Deducts stock for all items
+6. Creates the order with prices captured at time of purchase
+7. Clears the cart
+8. Returns the created order
