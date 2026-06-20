@@ -1,0 +1,111 @@
+import { Product, CartItem, Order } from "../types";
+import { v4 as uuidv4 } from "uuid";
+
+const now = new Date().toISOString();
+
+export const products: Product[] = [
+  {
+    id: uuidv4(),
+    name: "Wireless Noise-Cancelling Headphones",
+    description: "Premium over-ear headphones with 30hr battery life and active noise cancellation.",
+    price: 299.99,
+    category: "electronics",
+    stock: 50,
+    createdAt: now,
+    updatedAt: now,
+  },
+  {
+    id: uuidv4(),
+    name: "Mechanical Keyboard",
+    description: "TKL mechanical keyboard with Cherry MX Red switches and RGB backlighting.",
+    price: 129.99,
+    category: "electronics",
+    stock: 30,
+    createdAt: now,
+    updatedAt: now,
+  },
+  {
+    id: uuidv4(),
+    name: "Ergonomic Office Chair",
+    description: "Adjustable lumbar support chair with breathable mesh back for all-day comfort.",
+    price: 449.99,
+    category: "furniture",
+    stock: 15,
+    createdAt: now,
+    updatedAt: now,
+  },
+  {
+    id: uuidv4(),
+    name: "Standing Desk",
+    description: "Electric height-adjustable standing desk with memory presets, 140cm wide.",
+    price: 599.99,
+    category: "furniture",
+    stock: 10,
+    createdAt: now,
+    updatedAt: now,
+  },
+  {
+    id: uuidv4(),
+    name: "Running Shoes",
+    description: "Lightweight responsive running shoes with energy-return foam sole.",
+    price: 89.99,
+    category: "footwear",
+    stock: 100,
+    createdAt: now,
+    updatedAt: now,
+  },
+  {
+    id: uuidv4(),
+    name: "Leather Chelsea Boots",
+    description: "Classic pull-on Chelsea boots in full-grain leather with elastic side panels.",
+    price: 199.99,
+    category: "footwear",
+    stock: 40,
+    createdAt: now,
+    updatedAt: now,
+  },
+  {
+    id: uuidv4(),
+    name: "Stainless Steel Water Bottle",
+    description: "Double-wall vacuum insulated bottle, keeps drinks cold 24hr or hot 12hr.",
+    price: 34.99,
+    category: "accessories",
+    stock: 200,
+    createdAt: now,
+    updatedAt: now,
+  },
+  {
+    id: uuidv4(),
+    name: "Laptop Backpack",
+    description: "Water-resistant backpack with dedicated 15.6\" laptop sleeve and USB charging port.",
+    price: 79.99,
+    category: "accessories",
+    stock: 75,
+    createdAt: now,
+    updatedAt: now,
+  },
+  {
+    id: uuidv4(),
+    name: "4K Monitor 27\"",
+    description: "IPS panel 4K UHD monitor with 144Hz refresh rate and HDR400 support.",
+    price: 549.99,
+    category: "electronics",
+    stock: 20,
+    createdAt: now,
+    updatedAt: now,
+  },
+  {
+    id: uuidv4(),
+    name: "Yoga Mat",
+    description: "Non-slip natural rubber yoga mat, 6mm thick, includes carrying strap.",
+    price: 49.99,
+    category: "sports",
+    stock: 60,
+    createdAt: now,
+    updatedAt: now,
+  },
+];
+
+export const cartItems: CartItem[] = [];
+
+export const orders: Order[] = [];
